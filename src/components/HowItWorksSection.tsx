@@ -39,7 +39,7 @@ const HowItWorksSection = () => {
         </div>
 
         <div className="max-w-4xl mx-auto space-y-12 relative">
-          <div className="step-line absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-juice-green via-juice-orange to-juice-purple origin-top hidden md:block" />
+          <div className="step-line absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-juice-green/50 to-juice-orange origin-top hidden md:block" />
           
           {steps.map((s, i) => (
             <div key={i} className="step-item flex gap-6 md:gap-10 items-start relative">

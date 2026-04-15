@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Target, TrendingUp, Sparkles } from "lucide-react";
+import { Target, TrendingUp, Shield  } from "lucide-react";
 import about1 from "@/assets/about-1.jpg";
 import about2 from "@/assets/about-2.jpg";
 
@@ -160,7 +160,7 @@ const AboutSection = () => {
             </div>
             <div className="about-text flex gap-4 items-start juice-card p-6">
               <div className="w-12 h-12 rounded-xl gradient-bg-purple flex items-center justify-center shrink-0">
-                <Sparkles className="text-primary-foreground" size={24} />
+                <Shield  className="text-primary-foreground" size={24} />
               </div>
               <div>
                 <h3 className="font-display text-lg font-bold mb-1">Smart Operations</h3>

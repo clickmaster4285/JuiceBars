@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Zap, LeafyGreen, Heart, Smartphone } from "lucide-react";
+import { Zap, LeafyGreen, Medal , Smartphone } from "lucide-react";
 import posImg from "@/assets/pos-system.jpg";
 import ingredientsImg from "@/assets/ingredients.jpg";
 import loyaltyImg from "@/assets/loyalty.jpg";
@@ -12,7 +12,7 @@ gsap.registerPlugin(ScrollTrigger);
 const solutions = [
   { icon: Zap, title: "Lightning-Fast POS", desc: "Process orders in seconds with our optimized checkout system. Handle peak-hour rushes with zero lag.", img: posImg, color: "gradient-bg-hero" },
   { icon: LeafyGreen, title: "Ingredient Freshness Tracking", desc: "Real-time inventory alerts ensure you never run out or waste fresh produce. Track expiry, reorder points, and supplier data.", img: ingredientsImg, color: "gradient-bg-fresh" },
-  { icon: Heart, title: "Smart Loyalty Programs", desc: "Reward repeat customers automatically. Points, stamps, birthday rewards — keep them coming back for more.", img: loyaltyImg, color: "gradient-bg-purple" },
+  { icon: Medal , title: "Smart Loyalty Programs", desc: "Reward repeat customers automatically. Points, stamps, birthday rewards — keep them coming back for more.", img: loyaltyImg, color: "gradient-bg-purple" },
   { icon: Smartphone, title: "Mobile Ordering", desc: "Let customers order ahead via mobile. Reduce in-store queues and boost order accuracy with digital menus.", img: mobileImg, color: "gradient-bg-orange" },
 ];
 

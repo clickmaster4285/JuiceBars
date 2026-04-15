@@ -72,7 +72,7 @@ const WhyChooseUsSection = () => {
               style={{ opacity: 0, transform: 'translateY(40px)' }}
             >
               <div className={`absolute top-0 left-0 right-0 h-1 ${r.color}`} />
-              <div className={`w-14 h-14 rounded-full ${r.color}/15 flex items-center justify-center mx-auto mb-5 transition-all duration-300 group-hover:scale-110`}>
+              <div className={`w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-5 transition-all duration-300 group-hover:scale-110`}>
                 <r.icon className={r.textColor} size={28} />
               </div>
               <h3 className="font-display text-lg font-bold mb-2">{r.title}</h3>
