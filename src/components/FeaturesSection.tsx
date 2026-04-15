@@ -17,19 +17,50 @@ const FeaturesSection = () => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from(".feat-card", {
-        scrollTrigger: { trigger: sectionRef.current, start: "top 80%" },
-        opacity: 0, y: 50, rotation: 3, duration: 0.7, stagger: 0.1, ease: "power3.out",
+      // First, set the initial state explicitly
+      gsap.set(".feat-card", { 
+        opacity: 0, 
+        y: 50, 
+        rotation: 3 
+      });
+      
+      // Then animate them in
+      gsap.to(".feat-card", {
+        opacity: 1,
+        y: 0,
+        rotation: 0,
+        duration: 0.7,
+        stagger: 0.1,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 80%",
+          toggleActions: "play none none reverse",
+          invalidateOnRefresh: true,
+        }
       });
     }, sectionRef);
+    
     return () => ctx.revert();
+  }, []);
+
+  // Handle window resize to refresh ScrollTrigger
+  useEffect(() => {
+    const handleResize = () => {
+      ScrollTrigger.refresh();
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   return (
     <section ref={sectionRef} id="features" className="section-padding">
       <div className="container mx-auto">
         <div className="text-center mb-16">
-          <span className="gradient-bg-purple text-primary-foreground px-4 py-1.5 rounded-full font-display text-sm font-semibold">Features</span>
+          <span className="gradient-bg-purple text-primary-foreground px-4 py-1.5 rounded-full font-display text-sm font-semibold inline-block">
+            Features
+          </span>
           <h2 className="font-display text-3xl md:text-5xl font-bold mt-6 mb-4">
             Built for <span className="gradient-text-purple">Speed & Simplicity</span>
           </h2>
@@ -37,7 +68,11 @@ const FeaturesSection = () => {
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {features.map((f, i) => (
-            <div key={i} className="feat-card juice-card p-8 text-center group">
+            <div 
+              key={i} 
+              className="feat-card juice-card p-8 text-center group"
+              style={{ opacity: 0, transform: 'translateY(50px) rotate(3deg)' }}
+            >
               <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${f.gradient} flex items-center justify-center mx-auto mb-5 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6`}>
                 <f.icon className="text-primary-foreground" size={30} />
               </div>

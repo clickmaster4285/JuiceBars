@@ -27,6 +27,15 @@ const TestimonialsSection = () => {
     return () => ctx.revert();
   }, []);
 
+  // Auto-slide effect
+  useEffect(() => {
+    const interval = setInterval(() => {
+      navigate(1);
+    }, 5000); // Change card every 5 seconds
+
+    return () => clearInterval(interval);
+  }, []); // Empty dependency array means this runs once on mount
+
   const navigate = (dir: number) => {
     gsap.to(cardRef.current, {
       opacity: 0, x: dir > 0 ? -30 : 30, duration: 0.25, ease: "power2.in",

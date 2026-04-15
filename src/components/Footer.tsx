@@ -43,10 +43,10 @@ const Footer = () => {
           <div>
             <h4 className="font-display font-bold mb-4">Contact</h4>
             <ul className="space-y-2 font-body text-sm opacity-70">
-              <li>+1 (555) 234-5678</li>
-              <li>hello@juiceflow.com</li>
-              <li>123 Fresh Ave, Suite 100</li>
-              <li>San Diego, CA 92101</li>
+              <li>+92 333-1116842</li>
+              <li>marketing@clickmasters.pk</li>
+              <li>Paris Shopping Mall, 4th floor, Main PWD Rd, PWD Housing Society Sector A, Islamabad, Pakistan</li>
+              
             </ul>
           </div>
         </div>

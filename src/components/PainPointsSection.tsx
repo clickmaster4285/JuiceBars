@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Clock, Leaf, ShieldAlert, UserMinus } from "lucide-react";
@@ -15,22 +15,73 @@ const painPoints = [
 
 const PainPointsSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => {
+    // Preload the image
+    const img = new Image();
+    img.src = caseStudyImg;
+    
+    if (img.complete) {
+      setImageLoaded(true);
+    } else {
+      img.addEventListener('load', () => setImageLoaded(true));
+      img.addEventListener('error', () => setImageLoaded(true)); // Still proceed on error
+    }
+
+    return () => {
+      img.removeEventListener('load', () => setImageLoaded(true));
+      img.removeEventListener('error', () => setImageLoaded(true));
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!sectionRef.current) return;
+
     const ctx = gsap.context(() => {
-      gsap.from(".pain-card", {
-        scrollTrigger: { trigger: sectionRef.current, start: "top 80%" },
-        opacity: 0, y: 60, duration: 0.8, stagger: 0.15, ease: "power3.out",
-      });
+      // Refresh ScrollTrigger to ensure proper calculations
+      ScrollTrigger.refresh();
+
+      // Animate pain cards with better configuration
+      gsap.fromTo(".pain-card", 
+        { opacity: 0, y: 60 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          stagger: 0.15,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 85%",
+            end: "bottom 20%",
+            toggleActions: "play none none reverse",
+            invalidateOnRefresh: true,
+          }
+        }
+      );
     }, sectionRef);
+
     return () => ctx.revert();
+  }, []); // Remove imageLoaded dependency to run immediately
+
+  // Add resize handler to refresh ScrollTrigger
+  useEffect(() => {
+    const handleResize = () => {
+      ScrollTrigger.refresh();
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   return (
     <section ref={sectionRef} className="section-padding">
       <div className="container mx-auto">
         <div className="text-center mb-16">
-          <span className="gradient-bg-orange text-primary-foreground px-4 py-1.5 rounded-full font-display text-sm font-semibold">The Problem</span>
+          <span className="gradient-bg-orange text-primary-foreground px-4 py-1.5 rounded-full font-display text-sm font-semibold inline-block">
+            The Problem
+          </span>
           <h2 className="font-display text-3xl md:text-5xl font-bold mt-6 mb-4">
             Challenges That <span className="gradient-text-orange">Hold You Back</span>
           </h2>
@@ -39,7 +90,7 @@ const PainPointsSection = () => {
 
         <div className="grid md:grid-cols-2 gap-8 mb-12">
           {painPoints.map((p, i) => (
-            <div key={i} className="pain-card juice-card p-8 flex gap-5">
+            <div key={i} className="pain-card juice-card p-8 flex gap-5" style={{ opacity: 0 }}>
               <div className={`w-14 h-14 rounded-2xl ${p.color} flex items-center justify-center shrink-0`}>
                 <p.icon className="text-primary-foreground" size={28} />
               </div>
@@ -51,8 +102,15 @@ const PainPointsSection = () => {
           ))}
         </div>
 
-        <div className="pain-card overflow-hidden">
-          <img src={caseStudyImg} alt="Busy juice bar" className="w-full h-64 object-cover" loading="lazy" width={800} height={600} />
+        <div className="pain-card overflow-hidden rounded-2xl" style={{ opacity: 0 }}>
+          <img 
+            src={caseStudyImg} 
+            alt="Busy juice bar" 
+            className="w-full h-64 object-cover" 
+            loading="eager" 
+            width={800} 
+            height={600} 
+          />
         </div>
       </div>
     </section>

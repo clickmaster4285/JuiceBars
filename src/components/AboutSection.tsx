@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Target, TrendingUp, Sparkles } from "lucide-react";
@@ -9,26 +9,111 @@ gsap.registerPlugin(ScrollTrigger);
 
 const AboutSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
 
   useEffect(() => {
+    // Wait for images to load
+    const images = [about1, about2].map(src => {
+      const img = new Image();
+      img.src = src;
+      return img;
+    });
+
+    let loadedCount = 0;
+    const checkAllLoaded = () => {
+      loadedCount++;
+      if (loadedCount === images.length) {
+        setImagesLoaded(true);
+      }
+    };
+
+    images.forEach(img => {
+      if (img.complete) {
+        checkAllLoaded();
+      } else {
+        img.addEventListener('load', checkAllLoaded);
+        img.addEventListener('error', checkAllLoaded); // Still proceed even if error
+      }
+    });
+
+    // Fallback timeout in case images take too long
+    const timeout = setTimeout(() => setImagesLoaded(true), 3000);
+
+    return () => {
+      images.forEach(img => {
+        img.removeEventListener('load', checkAllLoaded);
+        img.removeEventListener('error', checkAllLoaded);
+      });
+      clearTimeout(timeout);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!imagesLoaded || !sectionRef.current) return;
+
     const ctx = gsap.context(() => {
-      gsap.from(".about-img", {
-        scrollTrigger: { trigger: sectionRef.current, start: "top 80%" },
-        opacity: 0, x: -60, duration: 1, stagger: 0.2, ease: "power3.out",
-      });
-      gsap.from(".about-text", {
-        scrollTrigger: { trigger: sectionRef.current, start: "top 75%" },
-        opacity: 0, y: 40, duration: 0.8, stagger: 0.15, ease: "power3.out",
-      });
+      // Refresh ScrollTrigger to ensure proper calculations
+      ScrollTrigger.refresh();
+
+      // Animation for images
+      gsap.fromTo(".about-img", 
+        { opacity: 0, x: -60 },
+        {
+          opacity: 1,
+          x: 0,
+          duration: 1,
+          stagger: 0.2,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 80%",
+            end: "bottom 20%",
+            toggleActions: "play none none reverse",
+            invalidateOnRefresh: true, // Recalculate on refresh
+          }
+        }
+      );
+
+      // Animation for text elements
+      gsap.fromTo(".about-text",
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          stagger: 0.15,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 75%",
+            end: "bottom 20%",
+            toggleActions: "play none none reverse",
+            invalidateOnRefresh: true,
+          }
+        }
+      );
     }, sectionRef);
+
     return () => ctx.revert();
+  }, [imagesLoaded]);
+
+  // Optional: Add resize handler to refresh ScrollTrigger
+  useEffect(() => {
+    const handleResize = () => {
+      ScrollTrigger.refresh();
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   return (
     <section ref={sectionRef} id="about" className="section-padding bg-muted/30">
       <div className="container mx-auto">
         <div className="text-center mb-16">
-          <span className="gradient-bg-hero text-primary-foreground px-4 py-1.5 rounded-full font-display text-sm font-semibold about-text">About Us</span>
+          <span className="gradient-bg-hero text-primary-foreground px-4 py-1.5 rounded-full font-display text-sm font-semibold inline-block about-text">
+            About Us
+          </span>
           <h2 className="font-display text-3xl md:text-5xl font-bold mt-6 mb-4 about-text">
             Powering the <span className="gradient-text">Future of Juice Bars</span>
           </h2>
@@ -36,8 +121,22 @@ const AboutSection = () => {
 
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="relative">
-            <img src={about1} alt="Modern juice bar" className="about-img rounded-2xl shadow-card w-full" loading="lazy" width={800} height={600} />
-            <img src={about2} alt="Barista making smoothie" className="about-img absolute -bottom-8 -right-4 w-48 md:w-64 rounded-2xl shadow-card border-4 border-card" loading="lazy" width={800} height={600} />
+            <img 
+              src={about1} 
+              alt="Modern juice bar" 
+              className="about-img rounded-2xl shadow-card w-full" 
+              loading="eager" 
+              width={800} 
+              height={600} 
+            />
+            <img 
+              src={about2} 
+              alt="Barista making smoothie" 
+              className="about-img absolute -bottom-8 -right-4 w-48 md:w-64 rounded-2xl shadow-card border-4 border-card" 
+              loading="eager" 
+              width={800} 
+              height={600} 
+            />
           </div>
 
           <div className="space-y-6">

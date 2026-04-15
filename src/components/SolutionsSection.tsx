@@ -21,11 +21,27 @@ const SolutionsSection = () => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from(".sol-card", {
-        scrollTrigger: { trigger: sectionRef.current, start: "top 80%" },
-        opacity: 0, scale: 0.9, duration: 0.7, stagger: 0.12, ease: "back.out(1.4)",
+      // First, set the initial state explicitly
+      gsap.set(".sol-card", { 
+        opacity: 0, 
+        scale: 0.9 
+      });
+      
+      // Then animate them in
+      gsap.to(".sol-card", {
+        opacity: 1,
+        scale: 1,
+        duration: 0.7,
+        stagger: 0.12,
+        ease: "back.out(1.4)",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 80%",
+          toggleActions: "play none none reverse",
+        }
       });
     }, sectionRef);
+    
     return () => ctx.revert();
   }, []);
 
@@ -33,7 +49,9 @@ const SolutionsSection = () => {
     <section ref={sectionRef} className="section-padding bg-muted/30">
       <div className="container mx-auto">
         <div className="text-center mb-16">
-          <span className="gradient-bg-fresh text-primary-foreground px-4 py-1.5 rounded-full font-display text-sm font-semibold">Our Solutions</span>
+          <span className="gradient-bg-fresh text-primary-foreground px-4 py-1.5 rounded-full font-display text-sm font-semibold inline-block">
+            Our Solutions
+          </span>
           <h2 className="font-display text-3xl md:text-5xl font-bold mt-6 mb-4">
             Everything You Need to <span className="gradient-text">Serve Faster</span>
           </h2>
@@ -43,7 +61,14 @@ const SolutionsSection = () => {
           {solutions.map((s, i) => (
             <div key={i} className="sol-card juice-card overflow-hidden group">
               <div className="relative h-56 overflow-hidden">
-                <img src={s.img} alt={s.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" width={800} height={600} />
+                <img 
+                  src={s.img} 
+                  alt={s.title} 
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+                  loading="eager" 
+                  width={800} 
+                  height={600} 
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 to-transparent" />
                 <div className={`absolute bottom-4 left-4 w-12 h-12 rounded-xl ${s.color} flex items-center justify-center`}>
                   <s.icon className="text-primary-foreground" size={24} />
