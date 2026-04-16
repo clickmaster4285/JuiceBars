@@ -90,7 +90,7 @@ const ContactSection = () => {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-5 gap-12 max-w-6xl mx-auto">
+        <div className="grid lg:grid-cols-5 gap-12 max-w-6xl mx-auto items-start">
           {/* Left side - Contact Info */}
           <div className="lg:col-span-2 space-y-6">
             {/* Address */}
@@ -168,65 +168,67 @@ const ContactSection = () => {
           </div>
 
           {/* Right side - Form */}
-          <form onSubmit={handleSubmit} className="lg:col-span-3 bg-card rounded-2xl p-8 shadow-xl border border-border space-y-5 contact-el">
-            <div className="flex gap-2 items-center mb-4 pb-3 border-b border-border">
-              <MessageSquare className="w-5 h-5 text-primary" />
-              <h3 className="font-display font-semibold text-foreground text-lg">Send us a message</h3>
-            </div>
+          <div className="lg:col-span-3">
+            <form onSubmit={handleSubmit} className="bg-card rounded-2xl p-8 shadow-xl border border-border space-y-5 contact-el">
+              <div className="flex gap-2 items-center mb-4 pb-3 border-b border-border">
+                <MessageSquare className="w-5 h-5 text-primary" />
+                <h3 className="font-display font-semibold text-foreground text-lg">Send us a message</h3>
+              </div>
 
-            <div className="grid sm:grid-cols-2 gap-5">
+              <div className="grid sm:grid-cols-2 gap-5">
+                <div>
+                  <label className="font-display text-sm font-semibold mb-1.5 block text-foreground">Full Name *</label>
+                  <input
+                    type="text" required value={form.name}
+                    onChange={(e) => setForm({ ...form, name: e.target.value })}
+                    className="w-full rounded-xl border border-border bg-background px-4 py-3 font-body text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all text-foreground placeholder:text-muted-foreground"
+                    placeholder="Your name"
+                  />
+                </div>
+                <div>
+                  <label className="font-display text-sm font-semibold mb-1.5 block text-foreground">Email Address *</label>
+                  <input
+                    type="email" required value={form.email}
+                    onChange={(e) => setForm({ ...form, email: e.target.value })}
+                    className="w-full rounded-xl border border-border bg-background px-4 py-3 font-body text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all text-foreground placeholder:text-muted-foreground"
+                    placeholder="you@email.com"
+                  />
+                </div>
+              </div>
+
               <div>
-                <label className="font-display text-sm font-semibold mb-1.5 block text-foreground">Full Name *</label>
+                <label className="font-display text-sm font-semibold mb-1.5 block text-foreground">
+                  Phone Number <span className="text-muted-foreground text-xs">(Optional)</span>
+                </label>
                 <input
-                  type="text" required value={form.name}
-                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  type="tel" value={form.phone}
+                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
                   className="w-full rounded-xl border border-border bg-background px-4 py-3 font-body text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all text-foreground placeholder:text-muted-foreground"
-                  placeholder="Your name"
+                  placeholder="+92 XXX XXXXXXX"
                 />
               </div>
+
               <div>
-                <label className="font-display text-sm font-semibold mb-1.5 block text-foreground">Email Address *</label>
-                <input
-                  type="email" required value={form.email}
-                  onChange={(e) => setForm({ ...form, email: e.target.value })}
-                  className="w-full rounded-xl border border-border bg-background px-4 py-3 font-body text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all text-foreground placeholder:text-muted-foreground"
-                  placeholder="you@email.com"
+                <label className="font-display text-sm font-semibold mb-1.5 block text-foreground">Your Message *</label>
+                <textarea
+                  required rows={4} value={form.message}
+                  onChange={(e) => setForm({ ...form, message: e.target.value })}
+                  className="w-full rounded-xl border border-border bg-background px-4 py-3 font-body text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all resize-none text-foreground placeholder:text-muted-foreground"
+                  placeholder="Tell us about your ice cream shop and requirements..."
                 />
               </div>
-            </div>
 
-            <div>
-              <label className="font-display text-sm font-semibold mb-1.5 block text-foreground">
-                Phone Number <span className="text-muted-foreground text-xs">(Optional)</span>
-              </label>
-              <input
-                type="tel" value={form.phone}
-                onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                className="w-full rounded-xl border border-border bg-background px-4 py-3 font-body text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all text-foreground placeholder:text-muted-foreground"
-                placeholder="+92 XXX XXXXXXX"
-              />
-            </div>
-
-            <div>
-              <label className="font-display text-sm font-semibold mb-1.5 block text-foreground">Your Message *</label>
-              <textarea
-                required rows={4} value={form.message}
-                onChange={(e) => setForm({ ...form, message: e.target.value })}
-                className="w-full rounded-xl border border-border bg-background px-4 py-3 font-body text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all resize-none text-foreground placeholder:text-muted-foreground"
-                placeholder="Tell us about your ice cream shop and requirements..."
-              />
-            </div>
-
-            <button
-              ref={btnRef}
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full bg-primary text-primary-foreground rounded-xl px-8 py-3.5 font-display font-bold transition-all hover:opacity-90 disabled:opacity-70 flex items-center justify-center gap-2"
-            >
-              <Send size={18} />
-              {isSubmitting ? "Sending Message..." : "Send Message"}
-            </button>
-          </form>
+              <button
+                ref={btnRef}
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-primary text-primary-foreground rounded-xl px-8 py-3.5 font-display font-bold transition-all hover:opacity-90 disabled:opacity-70 flex items-center justify-center gap-2"
+              >
+                <Send size={18} />
+                {isSubmitting ? "Sending Message..." : "Send Message"}
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </section>
